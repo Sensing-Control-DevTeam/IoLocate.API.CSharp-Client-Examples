@@ -43,7 +43,7 @@ namespace IoLocate.Api.Client.ConsoleApp
                     var devices = await _iolocateService.GetDevicesByCompanyIdAsync(token, company.Id);
                     foreach (var device in devices)
                     {
-                        Console.WriteLine("***********************************************");
+                        Console.WriteLine("***********************************************" );
 
                         Console.WriteLine($"Device Name: {device.Name}");
                         Console.WriteLine($"Longitude: {device.Longitude}");
