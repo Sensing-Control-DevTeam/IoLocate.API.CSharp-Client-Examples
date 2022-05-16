@@ -1,6 +1,5 @@
 ﻿using IoLocate.Api.Client.ConsoleApp.Models;
 using IoLocate.Api.Client.ConsoleApp.Models.Responses;
-using PagedList;
 
 namespace Tracker.Services.BusinessToBusiness.Responses
 {

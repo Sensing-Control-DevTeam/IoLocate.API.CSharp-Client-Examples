@@ -20,9 +20,14 @@ namespace IoLocate.Api.Client.ConsoleApp.Services
             _options = options;
         }
 
-        public async Task<AccessTokenModel> GetAccessTokenAsync(string userName, string password)
+        /// <summary>
+        /// Get Access Token By UserName and Password
+        /// </summary>
+        /// <param name="userName">User Name</param>
+        /// <param name="password">Password</param>
+        /// <returns>The response may be a successfull or failed response. If it is successfully response returns an Access Token</returns>
+        public async Task<B2BLoginResponse> GetAccessTokenAsync(string userName, string password)
         {
-            AccessTokenModel accessTokenModel = null;
             using (var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = _options.BaseAddress;
@@ -37,23 +42,18 @@ namespace IoLocate.Api.Client.ConsoleApp.Services
                     httpResponse.EnsureSuccessStatusCode();
                     var responseString = await httpResponse.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<B2BLoginResponse>(responseString);
-                    if (!response.IsSuccess)
-                        throw new AggregateException(response.Errors);
-
-                    accessTokenModel = response.Data;
+                    return response;
                 }
             }
-            return accessTokenModel;
         }
 
-        public async Task<IEnumerable<CompanyRepresentation>> GetCompaniesAsync(AccessTokenModel accessToken)
+        public async Task<GetB2BCompaniesResponse> GetCompaniesAsync(AccessTokenModel accessToken)
         {
-            var companies = new List<CompanyRepresentation>();
             using (var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = _options.BaseAddress;
                 httpClient.DefaultRequestHeaders.Clear();
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
+                httpClient.DefaultRequestHeaders.Add("X-ApiToken", accessToken.AccessToken);
                 using (var httpResponse = await httpClient.GetAsync("/api/b2b/companies"))
                 {
                     httpResponse.EnsureSuccessStatusCode();
@@ -62,21 +62,19 @@ namespace IoLocate.Api.Client.ConsoleApp.Services
                     if (!response.IsSuccess)
                         throw new AggregateException(response.Errors);
 
-                    companies = response.Data.ToList();
+                    return response;
                 }
             }
-            return companies;
         }
 
-        public async Task<IEnumerable<DeviceRepresentation>> GetDevicesByCompanyIdAsync(AccessTokenModel accessToken, int companyId)
+        public async Task<GetB2BDevicesResponse> GetDevicesByCompanyIdAsync(AccessTokenModel accessToken, int companyId, int page = 1)
         {
-            var devices = new List<DeviceRepresentation>();
             using (var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = _options.BaseAddress;
                 httpClient.DefaultRequestHeaders.Clear();
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
-                using (var httpResponse = await httpClient.GetAsync($"/api/b2b/companies/{companyId}/devices"))
+                httpClient.DefaultRequestHeaders.Add("X-ApiToken", accessToken.AccessToken);
+                using (var httpResponse = await httpClient.GetAsync($"/api/b2b/companies/{companyId}/devices?page={(page <= 0 ? 1 : page)}"))
                 {
                     httpResponse.EnsureSuccessStatusCode();
                     var responseString = await httpResponse.Content.ReadAsStringAsync();
@@ -84,21 +82,19 @@ namespace IoLocate.Api.Client.ConsoleApp.Services
                     if (!response.IsSuccess)
                         throw new AggregateException(response.Errors);
 
-                    devices = response.Data.ToList();
+                    return response;
                 }
             }
-            return devices;
         }
 
-        public async Task<IEnumerable<HistoryRepresentation>> GetHistoryByDeviceIdAsync(AccessTokenModel accessToken, int companyId, int deviceId)
+        public async Task<GetB2BDeviceHistoryResponse> GetHistoryByDeviceIdAsync(AccessTokenModel accessToken, int companyId, string deviceId, int page = 1)
         {
-            var historyList = new List<HistoryRepresentation>();
             using (var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = _options.BaseAddress;
                 httpClient.DefaultRequestHeaders.Clear();
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
-                using (var httpResponse = await httpClient.GetAsync($"/api/b2b/companies/{companyId}/devices/{deviceId}/logs"))
+                httpClient.DefaultRequestHeaders.Add("X-ApiToken", accessToken.AccessToken);
+                using (var httpResponse = await httpClient.GetAsync($"/api/b2b/companies/{companyId}/devices/{deviceId}/logs?page={(page <= 0 ?  1 : page)}"))
                 {
                     httpResponse.EnsureSuccessStatusCode();
                     var responseString = await httpResponse.Content.ReadAsStringAsync();
@@ -106,10 +102,9 @@ namespace IoLocate.Api.Client.ConsoleApp.Services
                     if (!response.IsSuccess)
                         throw new AggregateException(response.Errors);
 
-                    historyList = response.Data.ToList();
+                    return response;
                 }
             }
-            return historyList;
         }
     }
 }
