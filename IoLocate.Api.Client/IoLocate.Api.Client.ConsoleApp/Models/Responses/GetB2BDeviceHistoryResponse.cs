@@ -1,7 +1,4 @@
-﻿using IoLocate.Api.Client.ConsoleApp.Models;
-using IoLocate.Api.Client.ConsoleApp.Models.Responses;
-
-namespace Tracker.Services.BusinessToBusiness.Responses
+﻿namespace IoLocate.Api.Client.ConsoleApp.Models.Responses
 {
     public class GetB2BDeviceHistoryResponse : Response<PagedList<HistoryRepresentation>>
     {

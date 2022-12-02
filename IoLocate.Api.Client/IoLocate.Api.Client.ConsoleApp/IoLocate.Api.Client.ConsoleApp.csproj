@@ -53,6 +53,7 @@
     <Compile Include="Models\PagedList.cs" />
     <Compile Include="Models\Responses\B2BLoginResponse.cs" />
     <Compile Include="Models\Responses\GetB2BCompaniesResponse.cs" />
+    <Compile Include="Models\Responses\GetB2BDeviceHistoryByDateResponse.cs" />
     <Compile Include="Models\Responses\GetB2BDeviceHistoryResponse.cs" />
     <Compile Include="Models\Responses\GetB2BDevicesResponse.cs" />
     <Compile Include="Models\Responses\Response.cs" />

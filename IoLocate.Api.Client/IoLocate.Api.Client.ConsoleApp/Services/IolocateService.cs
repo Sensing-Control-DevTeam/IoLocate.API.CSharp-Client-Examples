@@ -1,13 +1,10 @@
 ﻿using IoLocate.Api.Client.ConsoleApp.Models;
+using IoLocate.Api.Client.ConsoleApp.Models.Responses;
 using IoLocate.Api.Client.ConsoleApp.Options;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Tracker.Services.BusinessToBusiness.Responses;
 
 namespace IoLocate.Api.Client.ConsoleApp.Services
 {
@@ -99,6 +96,26 @@ namespace IoLocate.Api.Client.ConsoleApp.Services
                     httpResponse.EnsureSuccessStatusCode();
                     var responseString = await httpResponse.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<GetB2BDeviceHistoryResponse>(responseString);
+                    if (!response.IsSuccess)
+                        throw new AggregateException(response.Errors);
+
+                    return response;
+                }
+            }
+        }
+
+        public async Task<GetB2BDeviceHistoryByDateResponse> GetHistoryByDeviceIdAndDateRangeAsync(AccessTokenModel accessToken, int companyId, string deviceId, DateTime from, DateTime to, int page = 1)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = _options.BaseAddress;
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Add("X-ApiToken", accessToken.AccessToken);
+                using (var httpResponse = await httpClient.GetAsync($"/api/b2b/companies/{companyId}/devices/{deviceId}/logs?from={from.ToString("o")}&to={to.ToString("o")}&page={(page <= 0 ? 1 : page)}"))
+                {
+                    httpResponse.EnsureSuccessStatusCode();
+                    var responseString = await httpResponse.Content.ReadAsStringAsync();
+                    var response = JsonConvert.DeserializeObject<GetB2BDeviceHistoryByDateResponse>(responseString);
                     if (!response.IsSuccess)
                         throw new AggregateException(response.Errors);
 

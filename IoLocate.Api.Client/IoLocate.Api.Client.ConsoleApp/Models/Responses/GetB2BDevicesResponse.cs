@@ -1,8 +1,6 @@
-﻿using IoLocate.Api.Client.ConsoleApp.Models;
-using IoLocate.Api.Client.ConsoleApp.Models.Responses;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Tracker.Services.BusinessToBusiness.Responses
+namespace IoLocate.Api.Client.ConsoleApp.Models.Responses
 {
     public class GetB2BDevicesResponse : Response<IEnumerable<DeviceRepresentation>>
     {
