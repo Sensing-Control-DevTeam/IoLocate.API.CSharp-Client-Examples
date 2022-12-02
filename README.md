@@ -70,6 +70,20 @@ var historyPaginated = getHistoryByDeviceIdResponse.Data;
     
 ```
 
+**6. Get History by device id and date range:**
+
+```csharp
+var from = new DateTime(2022, 11, 1);
+var to = new DateTime(2022, 11, 30).AddDays(1).AddMilliseconds(-1);
+
+var getHistoryByDeviceIdAndDateRangeResponse = await iolocateService.GetHistoryByDeviceIdAndDateRangeAsync(accessToken, company.Id, device.Id, from, to, page: 1);
+if (!getHistoryByDeviceIdAndDateRangeResponse.IsSuccess)
+    throw new AggregateException(getHistoryByDeviceIdAndDateRangeResponse.Errors);
+
+var historyPaginated = getHistoryByDeviceIdAndDateRangeResponse.Data;
+    
+```
+
 ### NOTE:  
   
 **Json Settings:**
