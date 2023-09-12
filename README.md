@@ -2,7 +2,7 @@
 
 ## :warning: Request credentials to access our IoLocate API at **support@iolocate.io**
 
-**Swagger UI**: https://app.iolocate.io/api/swagger-ui/#/b2b
+**Swagger UI**: https://api.iolocate.io/api/swagger-ui/#/b2b
 
 ## How it works?
 You can use [IoLocateService](https://github.com/Sensing-Control-DevTeam/IoLocate.API.CSharp-Client-Examples/blob/main/IoLocate.Api.Client/IoLocate.Api.Client.ConsoleApp/Services/IolocateService.cs) for access our data.
@@ -13,7 +13,7 @@ You can use [IoLocateService](https://github.com/Sensing-Control-DevTeam/IoLocat
 
 var options = new IoLocateApiOption
 {
-    BaseAddress = new Uri("https://app.iolocate.io")
+    BaseAddress = new Uri("https://api.iolocate.io")
 };
 var iolocateService = new IolocateService(options);
 
